@@ -1,0 +1,7 @@
+[package]
+name = "space-rust"
+version = "0.1.0"
+authors = ["Brandon DeRosier <bdero@mit.edu>"]
+
+[dependencies]
+sdl2 = "*"
