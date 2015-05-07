@@ -1,5 +1,7 @@
 Space Rust
 ==========
+[![Travis CI build image](https://travis-ci.org/bdero/space-rust.svg)](https://travis-ci.org/bdero/space-rust)
+
 A silly little SDL space shooter.
 
 License
