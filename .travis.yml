@@ -1,5 +1,15 @@
 language: rust
-addons:
-  apt:
-    packages:
-      - libsdl2-dev
+
+rust:
+  - beta
+  - nightly
+
+install:
+  - sudo add-apt-repository ppa:team-xbmc/ppa -y
+  - sudo apt-get update -q
+  - sudo apt-get install libsdl2-dev
+
+script:
+  - cargo build -v
+  - cargo test -v
+  - cargo doc -v
