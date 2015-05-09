@@ -1,11 +1,12 @@
 extern crate sdl2;
 
-use sdl2::video::{ Window, WindowPos };
-
 
 mod sr {
 
     extern crate sdl2;
+
+    use sdl2::sdl::Sdl;
+    use sdl2::video::{ Window, WindowPos };
 
 
     pub enum Error {
@@ -13,17 +14,31 @@ mod sr {
     }
 
     pub struct Game {
-        pub context: sdl2::sdl::Sdl
+        pub context: sdl2::sdl::Sdl,
+        pub window: Window
     }
 
     impl Game { }
 
     pub fn init() -> Result<Game, Error> {
-        match sdl2::init(sdl2::INIT_EVERYTHING) {
-            Ok(context) => Ok(Game { context: context }),
-            Err(message) => Err(Error::Sdl2Error(
+        let context = match sdl2::init(sdl2::INIT_EVERYTHING) {
+            Ok(context) => context,
+            Err(message) => return Err(Error::Sdl2Error(
                 format!("Couldn't initialize SDL context: {}", message)))
-        }
+        };
+
+        let window = match Window::new(&context, "Space Rust",
+                                       WindowPos::PosCentered,
+                                       WindowPos::PosCentered,
+                                       800, 600,
+                                       sdl2::video::OPENGL
+                                       | sdl2::video::SHOWN) {
+            Ok(window) => window,
+            Err(message) => return Err(Error::Sdl2Error(
+                format!("Couldn't initialize SDL window: {}", message)))
+    };
+
+        Ok(Game { context: context, window: window })
     }
 
 }
@@ -33,16 +48,6 @@ fn main() {
     let game = match sr::init() {
         Ok(context) => context,
         Err(error) => panic!(error)
-    };
-
-    // Create a window
-    let window = match Window::new(&game.context, "Space Rust",
-                                   WindowPos::PosCentered,
-                                   WindowPos::PosCentered,
-                                   800, 600,
-                                   sdl2::video::OPENGL | sdl2::video::SHOWN) {
-        Ok(window) => window,
-        Err(error) => panic!("Couldn't initialize SDL window: {}", error)
     };
 
     // Start the event loop
