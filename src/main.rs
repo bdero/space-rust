@@ -18,7 +18,24 @@ mod sr {
         pub window: Window
     }
 
-    impl Game { }
+    impl Game {
+
+        pub fn game_loop(&self) {
+            let mut event_pump = self.context.event_pump();
+
+            'update: loop {
+                use sdl2::event::Event;
+
+                for event in event_pump.poll_iter() {
+                    match event {
+                        Event::Quit { .. } => break 'update,
+                        _ => ()
+                    }
+                }
+            }
+        }
+
+    }
 
     pub fn init() -> Result<Game, Error> {
         let context = match sdl2::init(sdl2::INIT_EVERYTHING) {
@@ -51,19 +68,5 @@ fn main() {
     };
 
     // Start the event loop
-    let mut event_pump = game.context.event_pump();
-
-    'update: loop {
-        // Poll events
-        for event in event_pump.poll_iter() {
-            use sdl2::event::Event;
-
-            match event {
-                Event::Quit { .. } => break 'update,
-                _ => ()
-            }
-        }
-
-        // Update game
-    }
+    game.game_loop();
 }
